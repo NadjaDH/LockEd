@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      initialRoute: '/home',
+      initialRoute: '/tasks',
       routes: {
         '/home': (context) => const FrontPage(title: 'Frontpage of LockEd'),
         '/tasks': (context) => const TaskPage(title: 'Taskpage of LockEd'),
