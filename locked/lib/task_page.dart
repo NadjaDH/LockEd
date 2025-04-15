@@ -68,7 +68,7 @@ class TaskPageState extends State<TaskPage> {
         thumbVisibility: true, // Show scrollbar
         child: SingleChildScrollView( // Make the panel scrollable
           child: Padding(
-            padding: const EdgeInsets.all(40),
+            padding: const EdgeInsets.all(60),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -79,11 +79,11 @@ class TaskPageState extends State<TaskPage> {
                       // Task number and question
                       Text(
                   'Opgave ${q + 1}',
-                        style: const TextStyle(color: Colors.black87, fontFamily: 'DM sans', fontWeight: FontWeight.bold),
+                        style: const TextStyle(color: Color(0xFF022102), fontFamily: 'DM sans', fontWeight: FontWeight.bold),
                       ),
                       Text(
                         currentTask.questions[q].question,
-                        style: const TextStyle(color: Colors.green, fontFamily: 'DM sans', fontWeight: FontWeight.bold),
+                        style: const TextStyle(color: Color(0xFF022102), fontFamily: 'DM sans', fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
 
@@ -98,13 +98,13 @@ class TaskPageState extends State<TaskPage> {
                                 children: [
                                   Text(
                                     '${String.fromCharCode(97 + i)}) ',
-                                    style: const TextStyle(color: Colors.green, fontFamily: 'DM sans'),
+                                    style: const TextStyle(color: Color(0xFF022102), fontFamily: 'DM sans'),
                                   ),
                                   Flexible(
                                     child: Text(
                                       currentTask.questions[q].answers[i],
                                       style: TextStyle(
-                                        color: Colors.green,
+                                        color: Color(0xFF022102),
                                         fontFamily: 'DM sans',
                                         fontWeight: selectedAnswers[q] == i ? FontWeight.bold : FontWeight.normal,
                                       ),
@@ -132,19 +132,27 @@ class TaskPageState extends State<TaskPage> {
 
                 Text(
                   currentTask.reflectionScenario,
-                  style: const TextStyle(color: Colors.green, fontFamily: 'DM sans', fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: Color(0xFF022102), fontFamily: 'DM sans', fontWeight: FontWeight.bold, fontSize: 26),
                 ),
 
                 Text(
                   currentTask.reflectionQuestion,
-                  style: const TextStyle(color: Colors.green, fontFamily: 'DM sans'),
+                  style: const TextStyle(color: Color(0xFF022102), fontFamily: 'DM sans', fontWeight: FontWeight.normal, fontSize: 26),
                 ),
 
+                SizedBox(height: 20),
                 if (allAnswered)
                   Center(
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF66BB6A),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
                       onPressed: () => Navigator.pushNamed(context, '/ending'), // Navigate to the ending page
-                      child: const Text('Fortsæt'),
+                      child: const Text('Fortsæt', style: TextStyle(color: Color(0xFF022102))
+                      ),
                     ),
                   ),
               ],
