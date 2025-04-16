@@ -1,0 +1,8 @@
+
+flutter:
+  fonts:
+    - family: DM Sans
+      fonts:
+        - asset: locked/lib/fonts/DMSans.ttf
+          weight: 700
+
