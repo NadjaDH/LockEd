@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'data/tasks.dart';
 import 'models/task_collection.dart';
+import 'fonts/font.dart';
 
 class TaskPage extends StatefulWidget {
   const TaskPage({super.key, required this.title});
@@ -62,8 +63,7 @@ class TaskPageState extends State<TaskPage> {
   @override 
   Widget build(BuildContext context) {
     return Container(
-      color: const Color.fromRGBO(241, 241, 241, 1.0),
-      // TO-DO: Add a scrollable panel
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Scrollbar(
         thumbVisibility: true, // Show scrollbar
         child: SingleChildScrollView( // Make the panel scrollable
@@ -79,11 +79,11 @@ class TaskPageState extends State<TaskPage> {
                       // Task number and question
                       Text(
                   'Opgave ${q + 1}',
-                        style: const TextStyle(color: Color(0xFF022102), fontFamily: 'DM sans', fontWeight: FontWeight.bold),
+                        style: AppTextStyles.heading,
                       ),
                       Text(
                         currentTask.questions[q].question,
-                        style: const TextStyle(color: Color(0xFF022102), fontFamily: 'DM sans', fontWeight: FontWeight.bold),
+                        style: AppTextStyles.body,
                       ),
                       const SizedBox(height: 10),
 
@@ -98,14 +98,14 @@ class TaskPageState extends State<TaskPage> {
                                 children: [
                                   Text(
                                     '${String.fromCharCode(97 + i)}) ',
-                                    style: const TextStyle(color: Color(0xFF022102), fontFamily: 'DM sans'),
+                                    style: AppTextStyles.heading,
                                   ),
                                   Flexible(
                                     child: Text(
                                       currentTask.questions[q].answers[i],
                                       style: TextStyle(
-                                        color: Color(0xFF022102),
-                                        fontFamily: 'DM sans',
+                                        color: AppTextStyles.body.color,
+                                        fontFamily: AppTextStyles.body.fontFamily,
                                         fontWeight: selectedAnswers[q] == i ? FontWeight.bold : FontWeight.normal,
                                       ),
                                     ),
@@ -132,12 +132,12 @@ class TaskPageState extends State<TaskPage> {
 
                 Text(
                   currentTask.reflectionScenario,
-                  style: const TextStyle(color: Color(0xFF022102), fontFamily: 'DM sans', fontWeight: FontWeight.bold, fontSize: 26),
+                  style: AppTextStyles.body.copyWith(fontWeight: FontWeight.bold)
                 ),
 
                 Text(
                   currentTask.reflectionQuestion,
-                  style: const TextStyle(color: Color(0xFF022102), fontFamily: 'DM sans', fontWeight: FontWeight.normal, fontSize: 26),
+                  style: AppTextStyles.body,
                 ),
 
                 SizedBox(height: 20),
@@ -145,14 +145,13 @@ class TaskPageState extends State<TaskPage> {
                   Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF66BB6A),
+                        backgroundColor: Theme.of(context).primaryColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
                       onPressed: () => Navigator.pushNamed(context, '/ending'), // Navigate to the ending page
-                      child: const Text('Fortsæt', style: TextStyle(color: Color(0xFF022102))
-                      ),
+                      child: const Text('Fortsæt', style: AppTextStyles.body),
                     ),
                   ),
               ],
