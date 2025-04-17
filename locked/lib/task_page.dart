@@ -15,58 +15,70 @@ class TaskPageState extends State<TaskPage> {
   late TaskCollection currentTask;
   int currentTaskIndex = 0;
 
-  List<int?> selectedAnswers = [null, null]; // Store selected answers for each task
-  List<bool> feedbackShown = [false, false]; // Store feedback shown status for each task
-  
+  List<int?> selectedAnswers = [
+    null,
+    null,
+  ]; // Store selected answers for each task
+  List<bool> feedbackShown = [
+    false,
+    false,
+  ]; // Store feedback shown status for each task
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     currentTask = taskCollections[currentTaskIndex];
   }
 
-  void selectAnswer (int questionIndex, int answerIndex) { 
+  void selectAnswer(int questionIndex, int answerIndex) {
     setState(() {
       selectedAnswers[questionIndex] = answerIndex;
     });
   }
 
   void showFeedback(int questionIndex) {
-    final isCorrect = selectedAnswers[questionIndex] == currentTask.questions[questionIndex].correctAnswerIndex;
+    final isCorrect =
+        selectedAnswers[questionIndex] ==
+        currentTask.questions[questionIndex].correctAnswerIndex;
 
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text(isCorrect ? 'Korrekt!' : 'Ikke helt rigtigt'),
-        content: Text(
-          'Korrekt svar: ${currentTask.questions[questionIndex].answers[currentTask.questions[questionIndex].correctAnswerIndex]}'
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              setState(() {
-                feedbackShown[questionIndex] = true; // Mark feedback as shown
-              });
-            },
-            child: const Text('OK'),
+      builder:
+          (_) => AlertDialog(
+            title: Text(isCorrect ? 'Korrekt!' : 'Ikke helt rigtigt'),
+            content: Text(
+              'Korrekt svar: ${currentTask.questions[questionIndex].answers[currentTask.questions[questionIndex].correctAnswerIndex]}',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  setState(() {
+                    feedbackShown[questionIndex] =
+                        true; // Mark feedback as shown
+                  });
+                },
+                child: const Text('OK'),
+              ),
+            ],
           ),
-        ],
-      )
     );
   }
 
-  bool get allAnswered => selectedAnswers.every((a) => a != null) && 
-                            feedbackShown.every((f) => f);
+  bool get allAnswered =>
+      selectedAnswers.every((a) => a != null) && feedbackShown.every((f) => f);
 
-
-  @override 
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color.fromRGBO(241, 241, 241, 1.0),
-      // TO-DO: Add a scrollable panel
-      child: Scrollbar(
+    return Scaffold(
+      backgroundColor:
+          Theme.of(
+            context,
+          ).scaffoldBackgroundColor, // Use theme background color
+      body: Scrollbar(
         thumbVisibility: true, // Show scrollbar
-        child: SingleChildScrollView( // Make the panel scrollable
+        child: SingleChildScrollView(
+          // Make the panel scrollable
           child: Padding(
             padding: const EdgeInsets.all(60),
             child: Column(
@@ -78,42 +90,54 @@ class TaskPageState extends State<TaskPage> {
                     children: [
                       // Task number and question
                       Text(
-                  'Opgave ${q + 1}',
-                        style: const TextStyle(color: Color(0xFF022102), fontFamily: 'DM sans', fontWeight: FontWeight.bold),
+                        'Opgave ${q + 1}',
+                        style:
+                            Theme.of(context)
+                                .textTheme
+                                .titleLarge, // Use theme-defined heading style
                       ),
                       Text(
                         currentTask.questions[q].question,
-                        style: const TextStyle(color: Color(0xFF022102), fontFamily: 'DM sans', fontWeight: FontWeight.bold),
+                        style:
+                            Theme.of(context)
+                                .textTheme
+                                .bodyMedium, // Use theme-defined body text style
                       ),
                       const SizedBox(height: 10),
 
-      // Answers
+                      // Answers
                       Column(
                         children: List.generate(4, (i) {
                           return Material(
                             color: Colors.transparent,
-                            child: InkWell(         
+                            child: InkWell(
                               onTap: () => selectAnswer(q, i),
                               child: Row(
                                 children: [
                                   Text(
                                     '${String.fromCharCode(97 + i)}) ',
-                                    style: const TextStyle(color: Color(0xFF022102), fontFamily: 'DM sans'),
+                                    style:
+                                        Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium, // Use theme-defined text style
                                   ),
                                   Flexible(
                                     child: Text(
                                       currentTask.questions[q].answers[i],
-                                      style: TextStyle(
-                                        color: Color(0xFF022102),
-                                        fontFamily: 'DM sans',
-                                        fontWeight: selectedAnswers[q] == i ? FontWeight.bold : FontWeight.normal,
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium?.copyWith(
+                                        fontWeight:
+                                            selectedAnswers[q] == i
+                                                ? FontWeight.bold
+                                                : FontWeight.normal,
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          );  
+                          );
                         }),
                       ),
 
@@ -129,29 +153,47 @@ class TaskPageState extends State<TaskPage> {
                     ],
                   ),
 
-
                 Text(
                   currentTask.reflectionScenario,
-                  style: const TextStyle(color: Color(0xFF022102), fontFamily: 'DM sans', fontWeight: FontWeight.bold, fontSize: 26),
+                  style:
+                      Theme.of(
+                        context,
+                      ).textTheme.titleLarge, // Use theme-defined heading style
                 ),
 
                 Text(
                   currentTask.reflectionQuestion,
-                  style: const TextStyle(color: Color(0xFF022102), fontFamily: 'DM sans', fontWeight: FontWeight.normal, fontSize: 26),
+                  style:
+                      Theme.of(context)
+                          .textTheme
+                          .bodyMedium, // Use theme-defined body text style
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 if (allAnswered)
                   Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF66BB6A),
+                        backgroundColor:
+                            Theme.of(
+                              context,
+                            ).primaryColor, // Use theme primary color
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      onPressed: () => Navigator.pushNamed(context, '/ending'), // Navigate to the ending page
-                      child: const Text('Fortsæt', style: TextStyle(color: Color(0xFF022102))
+                      onPressed:
+                          () => Navigator.pushNamed(
+                            context,
+                            '/ending',
+                          ), // Navigate to the ending page
+                      child: Text(
+                        'Fortsæt',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color:
+                              Colors
+                                  .white, // Ensure text is visible on the button
+                        ),
                       ),
                     ),
                   ),
