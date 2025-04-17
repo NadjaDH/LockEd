@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:locked/styles/colors.dart';
+//import 'package:locked/styles/colors.dart';
 
 class AppTextStyles {
   static const heading = TextStyle(
     fontFamily: 'DM Sans',
     fontSize: 40,
     fontWeight: FontWeight.bold,
-    color: Mycolors.textColor,
+    color: Color.fromARGB(255, 255, 255, 255),
   );
 
   static const body = TextStyle(
     fontFamily: 'DM Sans',
     fontSize: 30,
     fontWeight: FontWeight.normal,
-    color: Mycolors.textColor,
+    color: Color.fromARGB(255, 255, 255, 255),
   );
 
   static const button = TextStyle(

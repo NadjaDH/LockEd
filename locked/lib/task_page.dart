@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'data/tasks.dart';
 import 'models/task_collection.dart';
+import 'fonts/font.dart';
 
 class TaskPage extends StatefulWidget {
   const TaskPage({super.key, required this.title});
@@ -70,12 +71,10 @@ class TaskPageState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor:
-          Theme.of(
-            context,
-          ).scaffoldBackgroundColor, // Use theme background color
-      body: Scrollbar(
+    return Container(
+      color: const Color.fromRGBO(241, 241, 241, 1.0),
+      // TO-DO: Add a scrollable panel
+      child: Scrollbar(
         thumbVisibility: true, // Show scrollbar
         child: SingleChildScrollView(
           // Make the panel scrollable
@@ -91,17 +90,19 @@ class TaskPageState extends State<TaskPage> {
                       // Task number and question
                       Text(
                         'Opgave ${q + 1}',
-                        style:
-                            Theme.of(context)
-                                .textTheme
-                                .titleLarge, // Use theme-defined heading style
+                        style: const TextStyle(
+                          color: Color(0xFF022102),
+                          fontFamily: 'DM sans',
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         currentTask.questions[q].question,
-                        style:
-                            Theme.of(context)
-                                .textTheme
-                                .bodyMedium, // Use theme-defined body text style
+                        style: const TextStyle(
+                          color: Color(0xFF022102),
+                          fontFamily: 'DM sans',
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 10),
 
@@ -116,17 +117,17 @@ class TaskPageState extends State<TaskPage> {
                                 children: [
                                   Text(
                                     '${String.fromCharCode(97 + i)}) ',
-                                    style:
-                                        Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium, // Use theme-defined text style
+                                    style: const TextStyle(
+                                      color: Color(0xFF022102),
+                                      fontFamily: 'DM sans',
+                                    ),
                                   ),
                                   Flexible(
                                     child: Text(
                                       currentTask.questions[q].answers[i],
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.bodyMedium?.copyWith(
+                                      style: TextStyle(
+                                        color: Color(0xFF022102),
+                                        fontFamily: 'DM sans',
                                         fontWeight:
                                             selectedAnswers[q] == i
                                                 ? FontWeight.bold
@@ -155,18 +156,22 @@ class TaskPageState extends State<TaskPage> {
 
                 Text(
                   currentTask.reflectionScenario,
-                  style:
-                      Theme.of(
-                        context,
-                      ).textTheme.titleLarge, // Use theme-defined heading style
+                  style: const TextStyle(
+                    color: Color(0xFF022102),
+                    fontFamily: 'DM sans',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 26,
+                  ),
                 ),
 
                 Text(
                   currentTask.reflectionQuestion,
-                  style:
-                      Theme.of(context)
-                          .textTheme
-                          .bodyMedium, // Use theme-defined body text style
+                  style: const TextStyle(
+                    color: Color(0xFF022102),
+                    fontFamily: 'DM sans',
+                    fontWeight: FontWeight.normal,
+                    fontSize: 26,
+                  ),
                 ),
 
                 const SizedBox(height: 20),
@@ -174,10 +179,7 @@ class TaskPageState extends State<TaskPage> {
                   Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            Theme.of(
-                              context,
-                            ).primaryColor, // Use theme primary color
+                        backgroundColor: const Color(0xFF66BB6A),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -187,13 +189,9 @@ class TaskPageState extends State<TaskPage> {
                             context,
                             '/ending',
                           ), // Navigate to the ending page
-                      child: Text(
+                      child: const Text(
                         'Fortsæt',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color:
-                              Colors
-                                  .white, // Ensure text is visible on the button
-                        ),
+                        style: TextStyle(color: Color(0xFF022102)),
                       ),
                     ),
                   ),

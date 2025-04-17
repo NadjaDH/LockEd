@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:locked/styles/colors.dart';
+//import 'package:locked/styles/colors.dart';
 import 'package:locked/fonts/font.dart'; // Import your font styles
 
 class EndingPage extends StatefulWidget {
@@ -43,6 +43,13 @@ class EndingPageState extends State<EndingPage> {
               'Du har gennemført opgaven. Flot arbejde!',
               style: AppTextStyles.body, // Use custom font for body text
               textAlign: TextAlign.center, // Center-align the text
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/home');
+              },
+              child: const Text('Tilbage til forsiden'),
             ),
           ],
         ),

@@ -33,7 +33,7 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       primaryColor: Mycolors.successColor,
-      scaffoldBackgroundColor: Mycolors.backgroundColor,
+      scaffoldBackgroundColor: Mycolors.background2Color,
       fontFamily: 'DM Sans',
       textTheme: const TextTheme(
         titleLarge: AppTextStyles.heading,
