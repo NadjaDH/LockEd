@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:locked/styles/colors.dart';
 import 'data/tasks.dart';
 import 'models/task_collection.dart';
-import 'fonts/font.dart';
+//import 'fonts/font.dart';
 
 class TaskPage extends StatefulWidget {
   const TaskPage({super.key, required this.title});
@@ -29,6 +30,10 @@ class TaskPageState extends State<TaskPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     currentTask = taskCollections[currentTaskIndex];
+
+    // Initialize answers and feedback lists dynamically
+    selectedAnswers = List<int?>.filled(currentTask.questions.length, null);
+    feedbackShown = List<bool>.filled(currentTask.questions.length, false);
   }
 
   void selectAnswer(int questionIndex, int answerIndex) {
@@ -46,12 +51,26 @@ class TaskPageState extends State<TaskPage> {
       context: context,
       builder:
           (_) => AlertDialog(
-            title: Text(isCorrect ? 'Korrekt!' : 'Ikke helt rigtigt'),
+            backgroundColor:
+                Theme.of(
+                  context,
+                ).scaffoldBackgroundColor, // Use theme background color
+            title: Text(
+              isCorrect ? 'Korrekt!' : 'Ikke helt rigtigt',
+              style:
+                  Theme.of(
+                    context,
+                  ).textTheme.titleLarge, // Use theme-defined title style
+            ),
             content: Text(
               'Korrekt svar: ${currentTask.questions[questionIndex].answers[currentTask.questions[questionIndex].correctAnswerIndex]}',
+              style:
+                  Theme.of(
+                    context,
+                  ).textTheme.bodyMedium, // Use theme-defined body text style
             ),
             actions: [
-              TextButton(
+              ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                   setState(() {
@@ -59,6 +78,25 @@ class TaskPageState extends State<TaskPage> {
                         true; // Mark feedback as shown
                   });
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(
+                    0xFF388E3C,
+                  ), // Use the custom button color
+                  foregroundColor: Colors.white, // Text color
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 15,
+                  ), // Increase padding for a larger button
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // Rounded corners
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 20, // Increase font size for larger text
+                    fontWeight: FontWeight.bold,
+                    fontFamily:
+                        'DM Sans', // Replace with your custom font family name
+                  ),
+                ),
                 child: const Text('OK'),
               ),
             ],
@@ -71,10 +109,12 @@ class TaskPageState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color.fromRGBO(241, 241, 241, 1.0),
-      // TO-DO: Add a scrollable panel
-      child: Scrollbar(
+    return Scaffold(
+      backgroundColor:
+          Theme.of(
+            context,
+          ).scaffoldBackgroundColor, // Use theme background color
+      body: Scrollbar(
         thumbVisibility: true, // Show scrollbar
         child: SingleChildScrollView(
           // Make the panel scrollable
@@ -84,93 +124,212 @@ class TaskPageState extends State<TaskPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 for (int q = 0; q < currentTask.questions.length; q++)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Task number and question
-                      Text(
-                        'Opgave ${q + 1}',
-                        style: const TextStyle(
-                          color: Color(0xFF022102),
-                          fontFamily: 'DM sans',
-                          fontWeight: FontWeight.bold,
-                        ),
+                  Container(
+                    margin: const EdgeInsets.only(
+                      bottom: 20.0,
+                    ), // Add spacing between tasks
+                    padding: const EdgeInsets.all(
+                      16.0,
+                    ), // Inner padding for the box
+                    decoration: BoxDecoration(
+                      color:
+                          Colors
+                              .transparent, // Make the box background transparent
+                      border: Border.all(
+                        color: Colors.black.withOpacity(
+                          0.4,
+                        ), // Border color with transparency
+                        width: 1.0, // Border width
                       ),
-                      Text(
-                        currentTask.questions[q].question,
-                        style: const TextStyle(
-                          color: Color(0xFF022102),
-                          fontFamily: 'DM sans',
-                          fontWeight: FontWeight.bold,
+                      borderRadius: BorderRadius.circular(
+                        12,
+                      ), // Rounded corners
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2), // Shadow color
+                          blurRadius: 8, // Blur radius for the shadow
+                          offset: const Offset(0, 4), // Offset for the shadow
                         ),
-                      ),
-                      const SizedBox(height: 10),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Task number and question
+                        Text(
+                          'Spørgsmål ${q + 1}',
+                          style:
+                              Theme.of(context)
+                                  .textTheme
+                                  .titleLarge, // Use theme-defined heading style
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          currentTask.questions[q].question,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.copyWith(
+                            fontStyle:
+                                FontStyle.italic, // Make the text cursive
+                          ),
+                        ),
+                        const SizedBox(height: 10),
 
-                      // Answers
-                      Column(
-                        children: List.generate(4, (i) {
-                          return Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () => selectAnswer(q, i),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    '${String.fromCharCode(97 + i)}) ',
-                                    style: const TextStyle(
-                                      color: Color(0xFF022102),
-                                      fontFamily: 'DM sans',
-                                    ),
-                                  ),
-                                  Flexible(
-                                    child: Text(
-                                      currentTask.questions[q].answers[i],
-                                      style: TextStyle(
-                                        color: Color(0xFF022102),
-                                        fontFamily: 'DM sans',
+                        // Answers
+                        Column(
+                          children: List.generate(4, (i) {
+                            return Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap:
+                                    () => selectAnswer(
+                                      q,
+                                      i,
+                                    ), // Update the selected answer
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Bold letter (a), (b), etc.
+                                    Text(
+                                      '${String.fromCharCode(97 + i)}) ', // Generate a), b), c), d)
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium?.copyWith(
                                         fontWeight:
-                                            selectedAnswers[q] == i
-                                                ? FontWeight.bold
-                                                : FontWeight.normal,
+                                            FontWeight
+                                                .bold, // Make the letter bold
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    // Regular answer text
+                                    Flexible(
+                                      child: Text(
+                                        currentTask.questions[q].answers[i],
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium?.copyWith(
+                                          fontWeight:
+                                              selectedAnswers[q] == i
+                                                  ? FontWeight.bold
+                                                  : FontWeight
+                                                      .normal, // Highlight selected answer
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        }),
-                      ),
-
-                      const SizedBox(height: 10),
-
-                      if (selectedAnswers[q] != null && !feedbackShown[q])
-                        ElevatedButton(
-                          onPressed: () => showFeedback(q),
-                          child: const Text('Check svar'),
+                            );
+                          }),
                         ),
 
-                      const Divider(height: 30),
-                    ],
-                  ),
+                        const SizedBox(height: 10),
 
-                Text(
-                  currentTask.reflectionScenario,
-                  style: const TextStyle(
-                    color: Color(0xFF022102),
-                    fontFamily: 'DM sans',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 26,
+                        // Feedback button
+                        if (selectedAnswers[q] != null && !feedbackShown[q])
+                          ElevatedButton(
+                            onPressed:
+                                () => showFeedback(q), // Show feedback dialog
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(
+                                0xFF388E3C,
+                              ), // Use the custom button color
+                              foregroundColor: Colors.white, // Text color
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 12,
+                              ), // Adjust padding
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                  8,
+                                ), // Rounded corners
+                              ),
+                              textStyle: const TextStyle(
+                                fontSize: 20, // Adjust size for the button text
+                                fontWeight: FontWeight.bold,
+                                fontFamily:
+                                    'DM Sans', // Replace with your custom font family name
+                              ),
+                            ),
+                            child: const Text('Check svar'),
+                          ),
+                      ],
+                    ),
                   ),
+                // Add a thin white line
+                const Divider(
+                  color: Colors.white, // Set the color of the line to white
+                  thickness: 1, // Set the thickness of the line
+                  height: 40, // Add spacing above and below the line
                 ),
 
-                Text(
-                  currentTask.reflectionQuestion,
-                  style: const TextStyle(
-                    color: Color(0xFF022102),
-                    fontFamily: 'DM sans',
-                    fontWeight: FontWeight.normal,
-                    fontSize: 26,
+                // "Bare til refleksion" heading
+                Center(
+                  child: Text(
+                    'Bare til refleksion', // Heading text
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold, // Make the heading bold
+                    ),
+                    textAlign: TextAlign.center, // Center-align the text
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ), // Add spacing between the heading and the reflection box
+                // Reflection box
+                Container(
+                  margin: const EdgeInsets.only(
+                    top: 20.0,
+                  ), // Add spacing above the box
+                  padding: const EdgeInsets.all(
+                    16.0,
+                  ), // Inner padding for the box
+                  decoration: BoxDecoration(
+                    color:
+                        Colors
+                            .transparent, // Make the box background transparent
+                    border: Border.all(
+                      color: Colors.black.withOpacity(
+                        0.4,
+                      ), // Border color with transparency
+                      width: 1.0, // Border width
+                    ),
+                    borderRadius: BorderRadius.circular(12), // Rounded corners
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2), // Shadow color
+                        blurRadius: 8, // Blur radius for the shadow
+                        offset: const Offset(0, 4), // Offset for the shadow
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment:
+                          CrossAxisAlignment.center, // Center horizontally
+                      children: [
+                        Text(
+                          currentTask.reflectionScenario,
+                          style:
+                              Theme.of(context)
+                                  .textTheme
+                                  .titleLarge, // Use theme-defined heading style
+                          textAlign: TextAlign.center, // Center-align the text
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ), // Add spacing between the texts
+                        Text(
+                          currentTask.reflectionQuestion,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.copyWith(
+                            fontStyle:
+                                FontStyle.italic, // Make the text cursive
+                          ),
+                          textAlign: TextAlign.center, // Center-align the text
+                        ),
+                      ],
+                    ),
                   ),
                 ),
 
@@ -179,9 +338,23 @@ class TaskPageState extends State<TaskPage> {
                   Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF66BB6A),
+                        backgroundColor:
+                            Mycolors.buttonColor, // Use the custom button color
+                        foregroundColor: Colors.white, // Text color
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 40,
+                          vertical: 20,
+                        ), // Adjust padding for a larger button
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(
+                            8,
+                          ), // Rounded corners
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize:
+                              25, // Use the font size from the button font
+                          fontWeight: FontWeight.bold, // Use bold text
+                          fontFamily: 'DM Sans', // Use the custom font family
                         ),
                       ),
                       onPressed:
@@ -189,10 +362,7 @@ class TaskPageState extends State<TaskPage> {
                             context,
                             '/ending',
                           ), // Navigate to the ending page
-                      child: const Text(
-                        'Fortsæt',
-                        style: TextStyle(color: Color(0xFF022102)),
-                      ),
+                      child: const Text('Fortsæt'),
                     ),
                   ),
               ],
