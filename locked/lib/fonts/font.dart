@@ -6,14 +6,14 @@ class AppTextStyles {
     fontFamily: 'DM Sans',
     fontSize: 40,
     fontWeight: FontWeight.bold,
-    color: Color.fromARGB(255, 255, 255, 255),
+    color: Color.fromARGB(255, 253, 250, 245),
   );
 
   static const body = TextStyle(
     fontFamily: 'DM Sans',
     fontSize: 30,
     fontWeight: FontWeight.normal,
-    color: Color.fromARGB(255, 255, 255, 255),
+    color: Color.fromARGB(255, 253, 250, 245),
   );
 
   static const button = TextStyle(
