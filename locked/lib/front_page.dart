@@ -18,112 +18,74 @@ class _FrontPageState extends State<FrontPage> {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(32.0),
+            padding: const EdgeInsets.only(
+              top: 70.0,
+              left: 32.0,
+              right: 32.0,
+            ), // Move elements higher
             child: Column(
               mainAxisAlignment:
-                  MainAxisAlignment.center, // Center content vertically
+                  MainAxisAlignment.start, // Align elements to the top
+              crossAxisAlignment:
+                  CrossAxisAlignment.center, // Center content horizontally
               children: [
+                // Image above the heading
+                Image.asset(
+                  'lib/images/first_icon.png', // Path to your image
+                  width: 325, // Adjust the width of the image
+                  height: 325, // Adjust the height of the image
+                  fit: BoxFit.contain, // Adjust how the image fits
+                ),
+                const SizedBox(
+                  height: 20,
+                ), // Add spacing between the image and the heading
+                // Heading Text
+                Text(
+                  'Ugens Tema',
+                  style: AppTextStyles.heading, // Use custom font for heading
+                  textAlign: TextAlign.center, // Center-align the text
+                ),
+                const SizedBox(
+                  height: 10,
+                ), // Add spacing between the heading and the divider
+                // Divider (shorter, spans only the width of the body text)
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment:
+                      MainAxisAlignment.center, // Center the divider
                   children: [
-                    // LEFT SIDE: Box with Title and Body Text
-                    Expanded(
-                      flex: 1, // Allocate more space for the text
-                      child: Align(
-                        alignment:
-                            Alignment.centerRight, // Align the box to the right
-                        child: Container(
-                          padding: const EdgeInsets.all(
-                            16.0,
-                          ), // Inner padding for the box
-                          decoration: BoxDecoration(
-                            color:
-                                Colors.transparent, // Make the box transparent
-                            border: Border.all(
-                              color: Colors.black.withOpacity(
-                                0.4,
-                              ), // Border color with transparency
-                              width: 1.0, // Reduced border width
-                            ),
-                            borderRadius: BorderRadius.circular(
-                              12,
-                            ), // Rounded corners
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(
-                                  0.3,
-                                ), // Shadow color
-                                blurRadius: 8, // Blur radius for the shadow
-                                offset: const Offset(
-                                  0,
-                                  4,
-                                ), // Offset for the shadow
-                              ),
-                            ],
-                          ),
-                          constraints: const BoxConstraints(
-                            minHeight:
-                                300, // Set the minimum height for the box
-                          ),
-                          child: Column(
-                            mainAxisAlignment:
-                                MainAxisAlignment
-                                    .center, // Center content vertically
-                            crossAxisAlignment:
-                                CrossAxisAlignment
-                                    .center, // Center content horizontally
-                            children: [
-                              Text(
-                                'Ugens Tema',
-                                style:
-                                    AppTextStyles
-                                        .heading, // Use custom font for heading
-                                textAlign:
-                                    TextAlign.center, // Center-align the text
-                              ),
-                              const SizedBox(
-                                height: 40,
-                              ), // Add more space between the heading and body text
-                              Text(
-                                'Her kan du skrive en introduktion til ugens tema.',
-                                style:
-                                    AppTextStyles
-                                        .body, // Use custom font for body text
-                                textAlign:
-                                    TextAlign
-                                        .center, // Center-align the body text
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    // RIGHT SIDE: Image
-                    Flexible(
-                      flex: 1, // Allocate space for the image
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 150.0,
-                        ), // Add spacing between text and image
-                        child: Image.asset(
-                          'lib/images/first_icon.png', // Path to your image in the styles folder
-                          width: 450, // Set the width of the image
-                          height: 450, // Set the height of the image
-                          fit: BoxFit.contain, // Adjust how the image fits
-                        ),
+                    SizedBox(
+                      width: 600, // Set the width of the divider
+                      child: const Divider(
+                        color: Color(
+                          0xFFA5D6A7,
+                        ), // Use the custom divider color
+                        thickness: 3, // Set the thickness of the divider
+                        height: 20, // Add spacing above and below the divider
                       ),
                     ),
                   ],
                 ),
+
+                const SizedBox(
+                  height: 20,
+                ), // Add spacing between the divider and the body text
+                // Body Text
+                Text(
+                  'Her kan du skrive en introduktion til ugens tema.',
+                  style: AppTextStyles.body, // Use custom font for body text
+                  textAlign: TextAlign.center, // Center-align the body text
+                ),
               ],
             ),
           ),
+
+          // Start Button at the Bottom Right
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
               padding: const EdgeInsets.only(
                 bottom: 32.0,
-                right: 32.0,
+                right: 100.0,
               ), // Add space from the edge
               child: ElevatedButton(
                 onPressed: () {
