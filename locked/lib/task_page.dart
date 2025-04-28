@@ -65,9 +65,11 @@ class TaskPageState extends State<TaskPage> {
                   children: [
                     Text(
                       isCorrect ? 'Korrekt!' : 'Ikke helt rigtigt',
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontSize: 24, // Reduced font size for better fit
+                      ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 5),
                     const Divider(color: Mycolors.dividerColor, thickness: 2),
                   ],
                 ),

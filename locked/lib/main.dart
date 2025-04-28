@@ -4,10 +4,13 @@ import 'package:locked/styles/colors.dart';
 import 'package:locked/fonts/font.dart';
 import 'front_page.dart';
 import 'task_page.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'ending_page.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterBluePlus.turnOn(); // <-- await needs 'async'
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
