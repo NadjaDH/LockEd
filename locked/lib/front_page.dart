@@ -90,24 +90,54 @@ class _FrontPageState extends State<FrontPage> {
       for (BluetoothService service in services) {
         for (BluetoothCharacteristic characteristic
             in service.characteristics) {
-          if (characteristic.properties.write) {
+          if (characteristic.properties.write ||
+              characteristic.properties.writeWithoutResponse) {
             targetCharacteristic = characteristic;
             developer.log('Found writable characteristic');
             return;
           }
         }
       }
+      developer.log('No writable characteristic found');
     } catch (e) {
       developer.log('Error during connection: $e');
     }
   }
 
-  void sendCommand(String command) {
-    if (targetCharacteristic != null) {
-      targetCharacteristic!.write(utf8.encode(command), withoutResponse: true);
-      developer.log('Command sent: $command');
-    } else {
-      developer.log('No writable characteristic found');
+  void sendCommand(String command) async {
+    if (targetDevice == null) {
+      developer.log('No target device connected');
+      return;
+    }
+
+    try {
+      final state = await targetDevice!.connectionState.first;
+      if (state != BluetoothConnectionState.connected) {
+        developer.log('Device is not connected');
+        return;
+      }
+
+      if (targetCharacteristic != null) {
+        if (targetCharacteristic!.properties.writeWithoutResponse) {
+          await targetCharacteristic!.write(
+            utf8.encode(command),
+            withoutResponse: true,
+          );
+          developer.log('Command sent with WRITE_NO_RESPONSE: $command');
+        } else if (targetCharacteristic!.properties.write) {
+          await targetCharacteristic!.write(
+            utf8.encode(command),
+            withoutResponse: false,
+          );
+          developer.log('Command sent with WRITE: $command');
+        } else {
+          developer.log('Characteristic does not support writing');
+        }
+      } else {
+        developer.log('No writable characteristic found');
+      }
+    } catch (e) {
+      developer.log('Error sending command: $e');
     }
   }
 
@@ -171,8 +201,11 @@ class _FrontPageState extends State<FrontPage> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 32.0, right: 100.0),
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   sendCommand("1");
+                  await Future.delayed(
+                    const Duration(milliseconds: 500),
+                  ); // Optional delay to ensure command is sent
                   Navigator.pushNamed(context, '/tasks');
                 },
                 style: ElevatedButton.styleFrom(
