@@ -1,3 +1,6 @@
+import 'dart:developer' as developer;
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:locked/styles/colors.dart';
 import 'data/tasks.dart';
@@ -340,8 +343,19 @@ class TaskPageState extends State<TaskPage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            onPressed:
-                                () => Navigator.pushNamed(context, '/ending'),
+                            onPressed: () {
+                              setState(() {
+                                currentTaskIndex +=
+                                    1; // Increment the currentTaskIndex
+                              });
+                              developer.log(
+                                'currentTaskIndex: $currentTaskIndex',
+                              );
+                              Navigator.pushNamed(
+                                context,
+                                '/ending',
+                              ); // Navigate to the '/ending' route
+                            },
                             child: const Text('Fortsæt'),
                           ),
                         ),
