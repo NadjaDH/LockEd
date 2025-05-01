@@ -1,8 +1,10 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
-import 'package:locked/styles/colors.dart';
+import 'package:locked/bluetooth.dart'; // Import the BluetoothConnection class
 import 'data/tasks.dart';
 import 'models/task_collection.dart';
 import 'fonts/font.dart';
+import 'styles/colors.dart';
 
 class TaskPage extends StatefulWidget {
   const TaskPage({super.key, required this.title});
@@ -17,14 +19,11 @@ class TaskPageState extends State<TaskPage> {
   late TaskCollection currentTask;
   int currentTaskIndex = 0;
 
-  List<int?> selectedAnswers = [
-    null,
-    null,
-  ]; // Store selected answers for each task
-  List<bool> feedbackShown = [
-    false,
-    false,
-  ]; // Store feedback shown status for each task
+  final BluetoothConnection bluetoothConnection =
+      BluetoothConnection(); // Create an instance of BluetoothConnection
+
+  List<int?> selectedAnswers = [];
+  List<bool> feedbackShown = [];
 
   @override
   void didChangeDependencies() {
@@ -340,8 +339,22 @@ class TaskPageState extends State<TaskPage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            onPressed:
-                                () => Navigator.pushNamed(context, '/ending'),
+                            onPressed: () {
+                              setState(() {
+                                currentTaskIndex +=
+                                    1; // Increment the currentTaskIndex
+                              });
+                              developer.log(
+                                'currentTaskIndex: $currentTaskIndex',
+                              );
+                              Navigator.pushNamed(
+                                context,
+                                '/ending',
+                              ); // Navigate to the '/ending' route
+                              bluetoothConnection.sendCommand(
+                                "Next Task",
+                              ); // Example of sending a command
+                            },
                             child: const Text('Fortsæt'),
                           ),
                         ),
