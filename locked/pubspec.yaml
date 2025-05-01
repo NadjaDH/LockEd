@@ -31,8 +31,6 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_blue_plus: ^1.35.4
-  android_alarm_manager_plus: ^3.0.4
-  shared_preferences: ^2.1.0
 
 dev_dependencies:
   flutter_test:
