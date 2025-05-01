@@ -5,17 +5,29 @@ import 'package:locked/fonts/font.dart';
 import 'front_page.dart';
 import 'task_page.dart';
 import 'ending_page.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterBluePlus.turnOn(); // Ensure Bluetooth is turned on
 
+  await requestPermissions(); // <-- Request permissions before scanning/connecting
+
   final BluetoothConnection bluetoothConnection =
       BluetoothConnection(); // Initialize BluetoothConnection
   await bluetoothConnection.initializeBluetooth(); // Start scanning for devices
 
   runApp(MyApp(bluetoothConnection: bluetoothConnection));
+}
+
+Future<void> requestPermissions() async {
+  await [
+    Permission.bluetooth,
+    Permission.bluetoothConnect,
+    Permission.bluetoothScan,
+    Permission.locationWhenInUse,
+  ].request();
 }
 
 class MyApp extends StatelessWidget {

@@ -14,7 +14,7 @@ class BluetoothConnection {
 
   Future<void> connectToDevice() async {
     try {
-      await FlutterBluePlus.startScan(timeout: const Duration(seconds: 5));
+      await FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
 
       scanSubscription = FlutterBluePlus.scanResults.listen((results) async {
         for (ScanResult result in results) {
