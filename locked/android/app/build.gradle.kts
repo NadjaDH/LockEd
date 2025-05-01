@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.locked"
-    compileSdk = 35 // Updated to 33
+    compileSdk = 34 // Updated to 33
     ndkVersion = "27.0.12077973"
 
     compileOptions {
@@ -15,7 +15,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = "11"
     }
 
     defaultConfig {
