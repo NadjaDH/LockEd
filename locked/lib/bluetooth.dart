@@ -52,10 +52,12 @@ class BluetoothConnection {
       for (BluetoothService service in services) {
         for (BluetoothCharacteristic characteristic
             in service.characteristics) {
-          if (characteristic.properties.write ||
-              characteristic.properties.writeWithoutResponse) {
+          if (characteristic.uuid.toString() == "2A57") {
+            // Match the UUID
             targetCharacteristic = characteristic;
-            developer.log('Found writable characteristic');
+            developer.log(
+              'Found writable characteristic: ${characteristic.uuid}',
+            );
             return;
           }
         }

@@ -70,9 +70,9 @@ class _FrontPageState extends State<FrontPage> {
               padding: const EdgeInsets.only(bottom: 32.0, right: 100.0),
               child: ElevatedButton(
                 onPressed: () async {
-                  await widget.bluetoothConnection.sendCommand(
-                    "1",
-                  ); // Use the passed BluetoothConnection instance
+                  //wait widget.bluetoothConnection.sendCommand(
+                  //  "1",
+                  //); // Use the passed BluetoothConnection instance
                   Navigator.pushNamed(context, '/tasks');
                 },
                 style: ElevatedButton.styleFrom(

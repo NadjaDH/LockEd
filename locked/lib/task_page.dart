@@ -347,13 +347,13 @@ class TaskPageState extends State<TaskPage> {
                               developer.log(
                                 'currentTaskIndex: $currentTaskIndex',
                               );
+                              bluetoothConnection.sendCommand(
+                                "close_servo",
+                              ); // Send command to the Bluetooth device
                               Navigator.pushNamed(
                                 context,
                                 '/ending',
                               ); // Navigate to the '/ending' route
-                              bluetoothConnection.sendCommand(
-                                "Next Task",
-                              ); // Example of sending a command
                             },
                             child: const Text('Fortsæt'),
                           ),
