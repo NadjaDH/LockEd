@@ -8,6 +8,9 @@ import 'ending_page.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
+
+const platform = MethodChannel('com.example.alarm/navigation');
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +22,17 @@ void main() async {
 
   await AndroidAlarmManager.initialize(); // Initializes the Android Alarm Manager
   scheduleToHomeAlarm();
+
+    // Listen for calls from Android
+  platform.setMethodCallHandler((call) async {
+    if (call.method == 'navigateToHome') {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('navigateToHome', true);
+      print('Method channel triggered: navigateToHome');
+    }
+  });
+
+  await platform.invokeMethod('scheduleAlarm');
 
   runApp(MyApp(bluetoothConnection: bluetoothConnection));
 }
