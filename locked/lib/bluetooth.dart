@@ -41,26 +41,44 @@ class BluetoothConnection {
     if (targetDevice == null) return;
 
     try {
-      final state = await targetDevice!.connectionState.first;
-      if (state != BluetoothConnectionState.connected) {
-        await targetDevice!.connect();
-      }
+      int retryCount = 0;
+      const int maxRetries = 3;
 
-      developer.log('Connected to ${targetDevice!.name}');
-
-      List<BluetoothService> services = await targetDevice!.discoverServices();
-      for (BluetoothService service in services) {
-        for (BluetoothCharacteristic characteristic
-            in service.characteristics) {
-          if (characteristic.properties.write ||
-              characteristic.properties.writeWithoutResponse) {
-            targetCharacteristic = characteristic;
-            developer.log('Found writable characteristic');
-            return;
+      while (retryCount < maxRetries) {
+        try {
+          final state = await targetDevice!.connectionState.first;
+          if (state != BluetoothConnectionState.connected) {
+            await targetDevice!.connect();
           }
+
+          developer.log('Connected to ${targetDevice!.name}');
+
+          List<BluetoothService> services =
+              await targetDevice!.discoverServices();
+          for (BluetoothService service in services) {
+            for (BluetoothCharacteristic characteristic
+                in service.characteristics) {
+              if (characteristic.properties.write ||
+                  characteristic.properties.writeWithoutResponse) {
+                targetCharacteristic = characteristic;
+                developer.log('Found writable characteristic');
+                return;
+              }
+            }
+          }
+          developer.log('No writable characteristic found');
+          return;
+        } catch (e) {
+          retryCount++;
+          developer.log('Connection attempt $retryCount failed: $e');
+          if (retryCount >= maxRetries) {
+            throw e;
+          }
+          await Future.delayed(
+            const Duration(seconds: 2),
+          ); // Wait before retrying
         }
       }
-      developer.log('No writable characteristic found');
     } catch (e) {
       developer.log('Error during connection: $e');
     }

@@ -47,8 +47,16 @@ class MyApp extends StatelessWidget {
               title: 'LockEd',
               bluetoothConnection: bluetoothConnection,
             ),
-        '/tasks': (context) => TaskPage(title: 'Taskpage of LockEd'),
-        '/ending': (context) => const EndingPage(title: 'Endingpage of LockEd'),
+        '/tasks':
+            (context) => TaskPage(
+              title: 'Taskpage of LockEd',
+              bluetoothConnection: bluetoothConnection, // Pass the instance
+            ),
+        '/ending':
+            (context) => EndingPage(
+              title: 'Endingpage of LockEd',
+              bluetoothConnection: bluetoothConnection, // Pass the instance
+            ),
       },
     );
   }

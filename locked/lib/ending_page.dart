@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:locked/styles/colors.dart'; // Import your custom colors
-import 'package:locked/fonts/font.dart'; // Import your font styles
+import 'package:locked/fonts/font.dart';
+import 'package:locked/bluetooth.dart'; // Import your font styles
 
 class EndingPage extends StatefulWidget {
-  const EndingPage({super.key, required this.title});
-
   final String title;
+  final BluetoothConnection bluetoothConnection; // Add this parameter
+  const EndingPage({
+    super.key,
+    required this.title,
+    required this.bluetoothConnection,
+  });
 
   @override
   State<EndingPage> createState() => EndingPageState();

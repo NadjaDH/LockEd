@@ -5,11 +5,17 @@ import 'data/tasks.dart';
 import 'models/task_collection.dart';
 import 'fonts/font.dart';
 import 'styles/colors.dart';
+import 'package:locked/ending_page.dart';
 
 class TaskPage extends StatefulWidget {
-  const TaskPage({super.key, required this.title});
-
   final String title;
+  final BluetoothConnection bluetoothConnection;
+
+  const TaskPage({
+    super.key,
+    required this.title,
+    required this.bluetoothConnection,
+  });
 
   @override
   State<TaskPage> createState() => TaskPageState();
@@ -18,9 +24,6 @@ class TaskPage extends StatefulWidget {
 class TaskPageState extends State<TaskPage> {
   late TaskCollection currentTask;
   int currentTaskIndex = 0;
-
-  final BluetoothConnection bluetoothConnection =
-      BluetoothConnection(); // Create an instance of BluetoothConnection
 
   List<int?> selectedAnswers = [];
   List<bool> feedbackShown = [];
@@ -347,13 +350,21 @@ class TaskPageState extends State<TaskPage> {
                               developer.log(
                                 'currentTaskIndex: $currentTaskIndex',
                               );
-                              Navigator.pushNamed(
+                              Navigator.push(
                                 context,
-                                '/ending',
-                              ); // Navigate to the '/ending' route
-                              bluetoothConnection.sendCommand(
-                                "Next Task",
-                              ); // Example of sending a command
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => EndingPage(
+                                        title: 'Endingpage of LockEd',
+                                        bluetoothConnection:
+                                            widget
+                                                .bluetoothConnection, // Pass the existing instance
+                                      ),
+                                ),
+                              ); // Navigate to the EndingPa// Navigate to the '/ending' route
+                              //bluetoothConnection.sendCommand(
+                              //"Next Task",
+                              //); // Example of sending a command
                             },
                             child: const Text('Fortsæt'),
                           ),
