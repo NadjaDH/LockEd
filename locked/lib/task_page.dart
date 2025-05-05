@@ -343,6 +343,9 @@ class TaskPageState extends State<TaskPage> {
                               ),
                             ),
                             onPressed: () {
+                              widget.bluetoothConnection.sendCommand(
+                                "close_servo",
+                              );
                               setState(() {
                                 currentTaskIndex +=
                                     1; // Increment the currentTaskIndex
