@@ -6,10 +6,13 @@ import 'package:locked/bluetooth.dart'; // Import your font styles
 class EndingPage extends StatefulWidget {
   final String title;
   final BluetoothConnection bluetoothConnection; // Add this parameter
+  final int themeIndex;
+
   const EndingPage({
     super.key,
     required this.title,
     required this.bluetoothConnection,
+    required this.themeIndex,
   });
 
   @override
@@ -67,7 +70,13 @@ class EndingPageState extends State<EndingPage> {
             // Styled Button
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/home');
+                Navigator.pushNamed(
+                  context,
+                  '/home',
+                  arguments: {
+                    'themeIndex': widget.themeIndex + 1,
+                  }, // Increment themeIndex
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor:

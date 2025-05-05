@@ -10,11 +10,13 @@ import 'package:locked/ending_page.dart';
 class TaskPage extends StatefulWidget {
   final String title;
   final BluetoothConnection bluetoothConnection;
+  final int themeIndex; // Add themeIndex parameter
 
   const TaskPage({
     super.key,
     required this.title,
     required this.bluetoothConnection,
+    required this.themeIndex,
   });
 
   @override
@@ -31,7 +33,7 @@ class TaskPageState extends State<TaskPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    currentTask = taskCollections[currentTaskIndex];
+    currentTask = taskCollections[widget.themeIndex];
 
     // Initialize answers and feedback lists dynamically
     selectedAnswers = List<int?>.filled(currentTask.questions.length, null);
@@ -360,14 +362,13 @@ class TaskPageState extends State<TaskPage> {
                                       (context) => EndingPage(
                                         title: 'Endingpage of LockEd',
                                         bluetoothConnection:
+                                            widget.bluetoothConnection,
+                                        themeIndex:
                                             widget
-                                                .bluetoothConnection, // Pass the existing instance
+                                                .themeIndex, // Pass the existing instance
                                       ),
                                 ),
                               ); // Navigate to the EndingPa// Navigate to the '/ending' route
-                              //bluetoothConnection.sendCommand(
-                              //"Next Task",
-                              //); // Example of sending a command
                             },
                             child: const Text('Fortsæt'),
                           ),
@@ -383,17 +384,3 @@ class TaskPageState extends State<TaskPage> {
     );
   }
 }
-
-
-//To-do
-// Scroll panel
-// Variable to store the tasks + answers
-// Number of the task
-// Text that holds the task
-// Text that holds the answers - letter for each option, answers should be clickable
-// Function to check if the answer is correct
-// Button to check the answer - available only after the answer is clicked
-// On click - pop-up with the answer
-// Text with scenario - bold
-// Text with reflection 
-// Button to go to the next page

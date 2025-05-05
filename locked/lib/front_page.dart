@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:locked/data/tasks.dart';
 import 'package:locked/styles/colors.dart';
 import 'package:locked/fonts/font.dart';
-import 'package:locked/bluetooth.dart'; // Import the BluetoothConnection class
+import 'package:locked/bluetooth.dart';
 
 class FrontPage extends StatefulWidget {
   final String title;
-  final BluetoothConnection bluetoothConnection; // Add this parameter
+  final BluetoothConnection bluetoothConnection;
+  final int themeIndex; // Add themeIndex parameter
 
   const FrontPage({
     super.key,
     required this.title,
-    required this.bluetoothConnection, // Add this parameter
+    required this.bluetoothConnection,
+    required this.themeIndex,
   });
 
   @override
@@ -37,7 +40,7 @@ class _FrontPageState extends State<FrontPage> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Ugens Tema',
+                  taskCollections[widget.themeIndex].theme, // Display theme
                   style: AppTextStyles.heading,
                   textAlign: TextAlign.center,
                 ),
@@ -70,10 +73,14 @@ class _FrontPageState extends State<FrontPage> {
               padding: const EdgeInsets.only(bottom: 32.0, right: 100.0),
               child: ElevatedButton(
                 onPressed: () async {
-                  await widget.bluetoothConnection.sendCommand(
-                    "1",
-                  ); // Use the passed BluetoothConnection instance
-                  Navigator.pushNamed(context, '/tasks');
+                  await widget.bluetoothConnection.sendCommand("1");
+                  Navigator.pushNamed(
+                    context,
+                    '/tasks',
+                    arguments: {
+                      'themeIndex': widget.themeIndex,
+                    }, // Pass themeIndex
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Mycolors.buttonColor,
