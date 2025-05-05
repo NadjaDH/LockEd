@@ -41,22 +41,40 @@ class MyApp extends StatelessWidget {
       title: 'LockEd',
       theme: AppTheme.lightTheme,
       initialRoute: '/home',
-      routes: {
-        '/home':
-            (context) => FrontPage(
-              title: 'LockEd',
-              bluetoothConnection: bluetoothConnection,
-            ),
-        '/tasks':
-            (context) => TaskPage(
-              title: 'Taskpage of LockEd',
-              bluetoothConnection: bluetoothConnection, // Pass the instance
-            ),
-        '/ending':
-            (context) => EndingPage(
-              title: 'Endingpage of LockEd',
-              bluetoothConnection: bluetoothConnection, // Pass the instance
-            ),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/home') {
+          final args =
+              settings.arguments as Map<String, dynamic>? ?? {'themeIndex': 0};
+          return MaterialPageRoute(
+            builder:
+                (context) => FrontPage(
+                  title: 'LockEd',
+                  bluetoothConnection: bluetoothConnection,
+                  themeIndex: args['themeIndex'],
+                ),
+          );
+        } else if (settings.name == '/tasks') {
+          final args = settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder:
+                (context) => TaskPage(
+                  title: 'Taskpage of LockEd',
+                  bluetoothConnection: bluetoothConnection,
+                  themeIndex: args['themeIndex'],
+                ),
+          );
+        } else if (settings.name == '/ending') {
+          final args = settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder:
+                (context) => EndingPage(
+                  title: 'Endingpage of LockEd',
+                  bluetoothConnection: bluetoothConnection,
+                  themeIndex: args['themeIndex'],
+                ),
+          );
+        }
+        return null;
       },
     );
   }
