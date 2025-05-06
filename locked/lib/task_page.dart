@@ -47,41 +47,48 @@ class TaskPageState extends State<TaskPage> {
   }
 
   void showFeedback(int questionIndex) {
+    final selectedAnswerIndex = selectedAnswers[questionIndex];
     final isCorrect =
-        selectedAnswers[questionIndex] ==
+        selectedAnswerIndex ==
         currentTask.questions[questionIndex].correctAnswerIndex;
+
+    final feedback =
+        isCorrect
+            ? currentTask.questions[questionIndex].correctFeedback
+            : currentTask
+                .questions[questionIndex]
+                .feedback[selectedAnswerIndex! <
+                    currentTask.questions[questionIndex].correctAnswerIndex
+                ? selectedAnswerIndex
+                : selectedAnswerIndex - 1];
 
     showDialog(
       context: context,
       builder:
           (_) => Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 600,
-              ), // Reduce the max width
+              constraints: const BoxConstraints(maxWidth: 600),
               child: AlertDialog(
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                contentPadding: const EdgeInsets.all(
-                  20,
-                ), // Adjust padding inside the dialog
+                contentPadding: const EdgeInsets.all(20),
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       isCorrect ? 'Korrekt!' : 'Ikke helt rigtigt',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontSize: 24, // Reduced font size for better fit
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleLarge?.copyWith(fontSize: 24),
                     ),
                     const SizedBox(height: 5),
                     const Divider(color: Mycolors.dividerColor, thickness: 2),
                   ],
                 ),
                 content: Text(
-                  'Korrekt svar: ${currentTask.questions[questionIndex].answers[currentTask.questions[questionIndex].correctAnswerIndex]}',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontSize: 16, // Reduced font size for better fit
-                  ),
+                  feedback, // Show feedback for the selected answer
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontSize: 16),
                 ),
                 actions: [
                   ElevatedButton(

@@ -16,14 +16,14 @@ class TaskQuestion {
   final String question;
   final List<String> answers;
   final int correctAnswerIndex;
-  final String? correctFeedback;
-  final String? incorrectFeedback;
+  final String correctFeedback; // Non-nullable
+  final List<String> feedback;
 
   TaskQuestion({
     required this.question,
     required this.answers,
     required this.correctAnswerIndex,
-    this.correctFeedback,
-    this.incorrectFeedback,
+    required this.correctFeedback, // Non-nullable
+    required this.feedback,
   });
 }
