@@ -67,28 +67,52 @@ class TaskPageState extends State<TaskPage> {
       builder:
           (_) => Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 600),
+              constraints: const BoxConstraints(maxWidth: 1100),
               child: AlertDialog(
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                contentPadding: const EdgeInsets.all(20),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      isCorrect ? 'Korrekt!' : 'Ikke helt rigtigt',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.titleLarge?.copyWith(fontSize: 24),
+                    const SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30.0,
+                        vertical: 8.0,
+                      ), // Adjust padding
+                      child: Text(
+                        isCorrect ? 'Korrekt!' : 'Ikke helt rigtigt',
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleLarge?.copyWith(fontSize: 30),
+                      ),
                     ),
                     const SizedBox(height: 5),
-                    const Divider(color: Mycolors.dividerColor, thickness: 2),
+                    const Divider(
+                      color: Mycolors.dividerColor,
+                      thickness: 2,
+                      height: 25, // Adjust spacing
+                      indent: 25.0, // Match the left padding of the text
+                      endIndent: 30.0, // Match the right padding of the text
+                    ),
                   ],
                 ),
-                content: Text(
-                  feedback, // Show feedback for the selected answer
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(fontSize: 16),
+                content: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30.0, // Add horizontal padding
+                    vertical: 8.0, // Add vertical padding
+                  ),
+                  child: Text(
+                    feedback, // Show feedback for the selected answer
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontSize: 22,
+                      wordSpacing: 1,
+                      height: 1.8,
+                    ),
+                  ),
                 ),
                 actions: [
                   ElevatedButton(
@@ -102,7 +126,7 @@ class TaskPageState extends State<TaskPage> {
                       backgroundColor: const Color(0xFF388E3C),
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 30,
+                        horizontal: 25,
                         vertical: 12,
                       ),
                       shape: RoundedRectangleBorder(
@@ -253,13 +277,16 @@ class TaskPageState extends State<TaskPage> {
 
                           // Divider between questions
                           if (q < currentTask.questions.length - 1)
-                            ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 800),
-                              child: const Divider(
-                                color: Mycolors.dividerColor,
-                                thickness: 3,
-                                height: 30, // Increased spacing
-                              ),
+                            Column(
+                              children: [
+                                const Divider(
+                                  color: Mycolors.dividerColor,
+                                  thickness: 3,
+                                ),
+                                const SizedBox(
+                                  height: 30,
+                                ), // Add spacing beneath the divider
+                              ],
                             ),
                         ],
                       ),
@@ -270,10 +297,12 @@ class TaskPageState extends State<TaskPage> {
                       child: const Divider(
                         color: Mycolors.dividerColor,
                         thickness: 3,
-                        height: 30, // Increased spacing
+                        height: 30, // Adjust spacing
                       ),
                     ),
-
+                    const SizedBox(
+                      height: 20,
+                    ), // Add spacing beneath the divider
                     // "Bare til refleksion" heading
                     Align(
                       alignment: Alignment.bottomLeft,
@@ -281,7 +310,7 @@ class TaskPageState extends State<TaskPage> {
                         'Bare til refleksion',
                         style: AppTextStyles.heading.copyWith(
                           fontSize:
-                              24, // Slightly increased font size for heading
+                              28, // Slightly increased font size for heading
                         ),
                         textAlign: TextAlign.left,
                       ),
@@ -320,7 +349,9 @@ class TaskPageState extends State<TaskPage> {
                         child: Text(
                           currentTask.reflectionQuestion,
                           style: AppTextStyles.body.copyWith(
-                            fontSize: 20, // Slightly increased font size
+                            fontSize: 20,
+                            fontWeight:
+                                FontWeight.bold, // Slightly increased font size
                           ),
                           textAlign: TextAlign.left,
                         ),
