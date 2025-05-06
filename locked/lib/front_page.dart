@@ -27,7 +27,7 @@ class _FrontPageState extends State<FrontPage> {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 70.0, left: 32.0, right: 32.0),
+            padding: const EdgeInsets.only(top: 90.0, left: 32.0, right: 32.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,7 +49,7 @@ class _FrontPageState extends State<FrontPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: 600,
+                      width: 1000,
                       child: const Divider(
                         color: Color(0xFFA5D6A7),
                         thickness: 3,
@@ -57,12 +57,6 @@ class _FrontPageState extends State<FrontPage> {
                       ),
                     ),
                   ],
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  'Her kan du skrive en introduktion til ugens tema.',
-                  style: AppTextStyles.body,
-                  textAlign: TextAlign.center,
                 ),
               ],
             ),
