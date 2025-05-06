@@ -2,7 +2,7 @@ import '../models/task_collection.dart';
 
 final List<TaskCollection> taskCollections = [
   TaskCollection(
-    theme: 'Systemadgang og ansvarlig brug af netværk',
+    theme: 'Systemadgang og Ansvarlig Brug af Netværk',
     questions: [
       TaskQuestion(
         question:
@@ -38,20 +38,22 @@ final List<TaskCollection> taskCollections = [
   ),
 
   TaskCollection(
-    theme: 'Datahåndtering og ansvar ved databrud',
+    theme: 'Datahåndtering og Ansvar Ved Databrud',
     questions: [
       TaskQuestion(
         question:
-            'Hvad skal en virksomhed gøre, hvis de opdager et databrud, der involverer persondata?',
+            'Hvordan kan følsomme data utilsigtet blive eksponeret i en cloud-løsning?',
         answers: [
-          'Informere de berørte personer med det samme og vente på deres feedback',
-          'Ignorere det, da det kan være en falsk alarm',
-          'Undersøge hændelsen og rapportere det til relevante myndigheder inden for 72 timer',
-          'Tænke på mulige løsninger internt og tage handling uden at informere myndighederne',
+          'Ved at dele data med ikke-godkendte brugere',
+          'Ved fejlagtig konfiguration af adgangsrettigheder til cloud-lagring',
+          'Ved at bruge cloud-løsninger uden sikkerhedsopdateringer',
+          'Ved at anvende et forældet password på cloud-konti',
         ],
-        correctAnswerIndex: 2,
-        correctFeedback: 'Korrekt! *TILFØJ TEKST*',
-        incorrectFeedback: '*TILFØJ TEKST*',
+        correctAnswerIndex: 1,
+        correctFeedback:
+            'Korrekt! Fejlagtig konfiguration af adgangsrettigheder til cloud-lagring kan føre til, at data bliver offentligt tilgængelige for uautoriserede personer, hvilket eksponerer følsomme oplysninger.',
+        incorrectFeedback:
+            'Fejlagtig konfiguration af adgangsrettigheder til cloud-lagring kan føre til, at data bliver offentligt tilgængelige for uautoriserede personer, hvilket eksponerer følsomme oplysninger.',
       ),
       TaskQuestion(
         question:

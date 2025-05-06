@@ -293,25 +293,30 @@ class TaskPageState extends State<TaskPage> {
 
                     const SizedBox(height: 14), // Slightly increased spacing
                     // Reflection Question (inside the box)
-                    Container(
-                      padding: const EdgeInsets.all(
-                        18,
-                      ), // Slightly increased padding
-                      margin: const EdgeInsets.only(
-                        top: 14,
-                      ), // Slightly increased spacing
-                      decoration: BoxDecoration(
-                        color: Mycolors.barColor,
-                        borderRadius: BorderRadius.circular(
-                          12,
-                        ), // Rounded corners
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        minWidth: 800, // Set the desired maximum width
                       ),
-                      child: Text(
-                        currentTask.reflectionQuestion,
-                        style: AppTextStyles.body.copyWith(
-                          fontSize: 20, // Slightly increased font size
+                      child: Container(
+                        padding: const EdgeInsets.all(
+                          18, // Slightly increased padding
                         ),
-                        textAlign: TextAlign.left,
+                        margin: const EdgeInsets.only(
+                          top: 14, // Slightly increased spacing
+                        ),
+                        decoration: BoxDecoration(
+                          color: Mycolors.barColor,
+                          borderRadius: BorderRadius.circular(
+                            12, // Rounded corners
+                          ),
+                        ),
+                        child: Text(
+                          currentTask.reflectionQuestion,
+                          style: AppTextStyles.body.copyWith(
+                            fontSize: 20, // Slightly increased font size
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
                       ),
                     ),
 
