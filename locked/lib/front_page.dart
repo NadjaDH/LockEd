@@ -4,14 +4,15 @@ import 'package:locked/styles/colors.dart';
 import 'package:locked/fonts/font.dart';
 import 'package:locked/bluetooth.dart';
 
+
+///The FrontPage widget is the first screen that the user sees when they open the app.
+///Displays the selected theme and a button to start the task sequence.
 class FrontPage extends StatefulWidget {
-  final String title;
   final BluetoothConnection bluetoothConnection;
-  final int themeIndex; // Add themeIndex parameter
+  final int themeIndex; //Index to determine the selected theme from [taskCollections].
 
   const FrontPage({
     super.key,
-    required this.title,
     required this.bluetoothConnection,
     required this.themeIndex,
   });
@@ -26,6 +27,7 @@ class _FrontPageState extends State<FrontPage> {
     return Scaffold(
       body: Stack(
         children: [
+          //Main context of the page
           Padding(
             padding: const EdgeInsets.only(top: 90.0, left: 32.0, right: 32.0),
             child: Column(
@@ -38,36 +40,38 @@ class _FrontPageState extends State<FrontPage> {
                   height: 325,
                   fit: BoxFit.contain,
                 ),
+                
                 const SizedBox(height: 20),
+                
+                //Theme title from the taskCollections list
                 Text(
-                  taskCollections[widget.themeIndex].theme, // Display theme
+                  taskCollections[widget.themeIndex].theme,
                   style: AppTextStyles.heading,
                   textAlign: TextAlign.center,
                 ),
+                
                 const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 1000,
-                      child: const Divider(
-                        color: Color(0xFFA5D6A7),
-                        thickness: 3,
-                        height: 20,
-                      ),
-                    ),
-                  ],
+                
+                // Visual divider under the title
+                const Divider(
+                  color: Color(0xFFA5D6A7),
+                  thickness: 3,
+                  height: 20,
                 ),
               ],
             ),
           ),
+          
+          // Bottom-right aligned "Start" button
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 32.0, right: 100.0),
               child: ElevatedButton(
+                // Sends a Bluetooth command to Arduino and navigates to the task page
                 onPressed: () async {
                   await widget.bluetoothConnection.sendCommand("1");
+                  
                   Navigator.pushNamed(
                     context,
                     '/tasks',
