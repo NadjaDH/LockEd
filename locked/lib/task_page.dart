@@ -7,6 +7,8 @@ import 'fonts/font.dart';
 import 'styles/colors.dart';
 import 'package:locked/ending_page.dart';
 
+/// The TaskPage widget displays a series of questions and answers
+/// This page also communicates with a Bluetooth device (e.g., to unlock a physical lock)
 class TaskPage extends StatefulWidget {
   final String title;
   final BluetoothConnection bluetoothConnection;
@@ -26,7 +28,6 @@ class TaskPage extends StatefulWidget {
 class TaskPageState extends State<TaskPage> {
   late TaskCollection currentTask;
   int currentTaskIndex = 0;
-
   List<int?> selectedAnswers = [];
   List<bool> feedbackShown = [];
 
@@ -40,112 +41,92 @@ class TaskPageState extends State<TaskPage> {
     feedbackShown = List<bool>.filled(currentTask.questions.length, false);
   }
 
+  /// Stores the selected answer for a question
   void selectAnswer(int questionIndex, int answerIndex) {
     setState(() {
       selectedAnswers[questionIndex] = answerIndex;
     });
   }
 
+  /// Shows feedback based on the selected answer
   void showFeedback(int questionIndex) {
     final selectedAnswerIndex = selectedAnswers[questionIndex];
-    final isCorrect =
-        selectedAnswerIndex ==
-        currentTask.questions[questionIndex].correctAnswerIndex;
+    final isCorrect = selectedAnswerIndex ==
+      currentTask.questions[questionIndex].correctAnswerIndex;
 
-    final feedback =
-        isCorrect
-            ? currentTask.questions[questionIndex].correctFeedback
-            : currentTask
-                .questions[questionIndex]
-                .feedback[selectedAnswerIndex! <
+    final feedback = isCorrect
+        ? currentTask.questions[questionIndex].correctFeedback
+        : currentTask.questions[questionIndex]
+            .feedback[selectedAnswerIndex! <
                     currentTask.questions[questionIndex].correctAnswerIndex
                 ? selectedAnswerIndex
                 : selectedAnswerIndex - 1];
 
     showDialog(
       context: context,
-      builder:
-          (_) => Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1100),
-              child: AlertDialog(
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8.0,
-                ),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 30),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 30.0,
-                        vertical: 8.0,
-                      ), // Adjust padding
-                      child: Text(
-                        isCorrect ? 'Korrekt!' : 'Ikke helt rigtigt',
-                        style: Theme.of(
-                          context,
-                        ).textTheme.titleLarge?.copyWith(fontSize: 30),
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    const Divider(
-                      color: Mycolors.dividerColor,
-                      thickness: 2,
-                      height: 25, // Adjust spacing
-                      indent: 25.0, // Match the left padding of the text
-                      endIndent: 30.0, // Match the right padding of the text
-                    ),
-                  ],
-                ),
-                content: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30.0, // Add horizontal padding
-                    vertical: 8.0, // Add vertical padding
-                  ),
+      builder: (_) => Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1100),
+          child: AlertDialog(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0,),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0,),
                   child: Text(
-                    feedback, // Show feedback for the selected answer
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    isCorrect ? 'Korrekt!' : 'Ikke helt rigtigt',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 30),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                const Divider(
+                  color: Mycolors.dividerColor,
+                  thickness: 2,
+                  height: 25,
+                  indent: 25.0,
+                  endIndent: 30.0,
+                ),
+              ],
+            ),
+            content: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+              child: Text(
+                feedback, // Show feedback for the selected answer
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: 22,
                       wordSpacing: 1,
                       height: 1.8,
                     ),
-                  ),
-                ),
-                actions: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      setState(() {
-                        feedbackShown[questionIndex] = true;
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF388E3C),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 25,
-                        vertical: 12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    child: const Text('OK'),
-                  ),
-                ],
               ),
             ),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  setState(() {
+                    feedbackShown[questionIndex] = true;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF388E3C),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                child: const Text('OK'),
+              ),
+            ],
           ),
+        ),
+      ),
     );
   }
 
+  /// Checks if all questions have been answered and feedback has been shown
   bool get allAnswered =>
       selectedAnswers.every((a) => a != null) && feedbackShown.every((f) => f);
 
@@ -157,15 +138,10 @@ class TaskPageState extends State<TaskPage> {
         thumbVisibility: true,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 60, // Keep horizontal padding
-              vertical: 60, // Ensure equal top and bottom padding
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 60),
             child: Center(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: 800, // Limit the width of elements
-                ),
+                constraints: const BoxConstraints(maxWidth: 800),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -177,52 +153,43 @@ class TaskPageState extends State<TaskPage> {
                           Text(
                             'Spørgsmål ${q + 1}',
                             style: AppTextStyles.heading.copyWith(
-                              fontSize:
-                                  28, // Slightly increased font size for heading
+                              fontSize: 28,
                             ),
                           ),
                           const SizedBox(
                             height: 18,
-                          ), // Slightly increased spacing
+                          ),
                           Text(
                             currentTask.questions[q].question,
                             style: AppTextStyles.body.copyWith(
-                              fontSize:
-                                  20, // Slightly increased font size for body
+                              fontSize: 20,
                               fontStyle: FontStyle.italic,
                             ),
                             textAlign: TextAlign.left,
                           ),
                           const SizedBox(
                             height: 18,
-                          ), // Slightly increased spacing
-                          // Answers
+                          ),
+                          
+                          // List of answers
                           Column(
                             children: List.generate(4, (i) {
                               return Container(
-                                margin: const EdgeInsets.only(
-                                  bottom: 18,
-                                ), // Slightly increased spacing
-                                padding: const EdgeInsets.all(
-                                  18,
-                                ), // Slightly increased padding
+                                margin: const EdgeInsets.only(bottom: 18), 
+                                padding: const EdgeInsets.all(18), 
                                 decoration: BoxDecoration(
                                   color: Mycolors.barColor,
-                                  borderRadius: BorderRadius.circular(
-                                    12,
-                                  ), // Rounded corners
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: InkWell(
                                   onTap: () => selectAnswer(q, i),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '${String.fromCharCode(65 + i)}) ',
                                         style: AppTextStyles.body.copyWith(
-                                          fontSize:
-                                              20, // Slightly increased font size
+                                          fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                           color: Mycolors.textColor,
                                         ),
@@ -231,8 +198,7 @@ class TaskPageState extends State<TaskPage> {
                                         child: Text(
                                           currentTask.questions[q].answers[i],
                                           style: AppTextStyles.body.copyWith(
-                                            fontSize:
-                                                20, // Slightly increased font size
+                                            fontSize: 20,
                                             fontWeight:
                                                 selectedAnswers[q] == i
                                                     ? FontWeight.bold
@@ -249,7 +215,8 @@ class TaskPageState extends State<TaskPage> {
 
                           const SizedBox(
                             height: 18,
-                          ), // Slightly increased spacing
+                          ),
+                          
                           // Feedback button
                           if (selectedAnswers[q] != null && !feedbackShown[q])
                             ElevatedButton(
@@ -257,18 +224,12 @@ class TaskPageState extends State<TaskPage> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF388E3C),
                                 foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 28, // Slightly increased padding
-                                  vertical: 16, // Slightly increased padding
-                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    12,
-                                  ), // Rounded corners
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
                                 textStyle: const TextStyle(
-                                  fontSize:
-                                      20, // Slightly increased font size for button text
+                                  fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -285,7 +246,7 @@ class TaskPageState extends State<TaskPage> {
                                 ),
                                 const SizedBox(
                                   height: 30,
-                                ), // Add spacing beneath the divider
+                                ),
                               ],
                             ),
                         ],
@@ -302,88 +263,73 @@ class TaskPageState extends State<TaskPage> {
                     ),
                     const SizedBox(
                       height: 20,
-                    ), // Add spacing beneath the divider
-                    // "Bare til refleksion" heading
+                    ),
+                    
+                    // Reflection section
                     Align(
                       alignment: Alignment.bottomLeft,
                       child: Text(
                         'Bare til refleksion',
                         style: AppTextStyles.heading.copyWith(
-                          fontSize:
-                              28, // Slightly increased font size for heading
+                          fontSize: 28,
                         ),
                         textAlign: TextAlign.left,
                       ),
                     ),
 
-                    const SizedBox(height: 18), // Slightly increased spacing
+                    const SizedBox(height: 18),
                     // Reflection Scenario (outside the box)
                     Text(
                       currentTask.reflectionScenario,
                       style: AppTextStyles.body.copyWith(
-                        fontSize: 20, // Slightly increased font size
+                        fontSize: 20,
                         fontStyle: FontStyle.italic,
                       ),
                       textAlign: TextAlign.left,
                     ),
 
-                    const SizedBox(height: 14), // Slightly increased spacing
+                    const SizedBox(height: 14),
+
                     // Reflection Question (inside the box)
                     ConstrainedBox(
                       constraints: const BoxConstraints(
-                        minWidth: 800, // Set the desired maximum width
+                        minWidth: 800,
                       ),
                       child: Container(
-                        padding: const EdgeInsets.all(
-                          18, // Slightly increased padding
-                        ),
-                        margin: const EdgeInsets.only(
-                          top: 14, // Slightly increased spacing
-                        ),
+                        padding: const EdgeInsets.all(18),
+                        margin: const EdgeInsets.only(top: 14),
                         decoration: BoxDecoration(
                           color: Mycolors.barColor,
-                          borderRadius: BorderRadius.circular(
-                            12, // Rounded corners
-                          ),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           currentTask.reflectionQuestion,
                           style: AppTextStyles.body.copyWith(
                             fontSize: 20,
-                            fontWeight:
-                                FontWeight.bold, // Slightly increased font size
-                          ),
+                            fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 24), // Slightly increased spacing
+                    const SizedBox(height: 24),
+
                     // Continue button
                     if (allAnswered)
                       Align(
                         alignment: Alignment.bottomRight,
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: 24.0, // Slightly increased padding
-                            right: 7.0, // Increased padding
-                          ),
+                          padding: const EdgeInsets.only(bottom: 24.0, right: 7.0),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Mycolors.buttonColor,
                               foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 40, // Increased padding
-                                vertical: 18, // Increased padding
-                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                  12,
-                                ), // Rounded corners
+                                borderRadius: BorderRadius.circular(12),
                               ),
                               textStyle: const TextStyle(
-                                fontSize:
-                                    22, // Slightly increased font size for button text
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -401,15 +347,11 @@ class TaskPageState extends State<TaskPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder:
-                                      (context) => EndingPage(
-                                        title: 'Endingpage of LockEd',
-                                        bluetoothConnection:
-                                            widget.bluetoothConnection,
-                                        themeIndex:
-                                            widget
-                                                .themeIndex, // Pass the existing instance
-                                      ),
+                                  builder: (context) => EndingPage(
+                                    title: 'Endingpage of LockEd',
+                                    bluetoothConnection: widget.bluetoothConnection,
+                                    themeIndex: widget.themeIndex, // Pass the existing instance of BluetoothConnection
+                                  ),
                                 ),
                               ); // Navigate to the EndingPa// Navigate to the '/ending' route
                             },

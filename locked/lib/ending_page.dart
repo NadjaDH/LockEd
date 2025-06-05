@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:locked/styles/colors.dart'; // Import your custom colors
+import 'package:locked/styles/colors.dart';
 import 'package:locked/fonts/font.dart';
-import 'package:locked/bluetooth.dart'; // Import your font styles
+import 'package:locked/bluetooth.dart';
 
+/// A page shown at the end of a task to congratulate the user and guide them back to the home screen
 class EndingPage extends StatefulWidget {
   final String title;
-  final BluetoothConnection bluetoothConnection; // Add this parameter
+  final BluetoothConnection bluetoothConnection;
   final int themeIndex;
 
   const EndingPage({
@@ -26,40 +27,41 @@ class EndingPageState extends State<EndingPage> {
       body: Center(
         child: Column(
           mainAxisAlignment:
-              MainAxisAlignment.center, // Center content vertically
+              MainAxisAlignment.center,
           children: [
             // Centered Image
             Image.asset(
-              'lib/images/second_icon.png', // Path to your image
-              width: 300, // Adjust the width of the image
-              height: 300, // Adjust the height of the image
-              fit: BoxFit.contain, // Adjust how the image fits
+              'lib/images/second_icon.png',
+              width: 300,
+              height: 300,
+              fit: BoxFit.contain,
             ),
             const SizedBox(
               height: 24,
-            ), // Add spacing between the image and the heading
+            ),
             // Heading Text
             Text(
               'Godt gået!',
-              style: AppTextStyles.heading, // Use custom font for heading
+              style: AppTextStyles.heading,
             ),
             const SizedBox(
               height: 16,
-            ), // Add spacing between the heading and body text
+            ),
             ConstrainedBox(
               constraints: const BoxConstraints(
                 maxWidth: 700,
-              ), // Match the width of other elements
+              ),
               child: const Divider(
                 color: Mycolors.dividerColor,
                 thickness: 3,
                 height: 30,
               ),
-            ), // Body Text
+            ),
+            // Body Text
             Text(
               'Du har gennemført opgaven. Flot arbejde!',
-              style: AppTextStyles.body, // Use custom font for body text
-              textAlign: TextAlign.center, // Center-align the text
+              style: AppTextStyles.body,
+              textAlign: TextAlign.center,
             ),
             const SizedBox(
               height: 32, // Add more space between the body text and the button
@@ -67,7 +69,8 @@ class EndingPageState extends State<EndingPage> {
             const SizedBox(
               height: 32, // Add more space between the divider and the button
             ),
-            // Styled Button
+            
+            // Button to go back to the home screen
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(
@@ -75,24 +78,20 @@ class EndingPageState extends State<EndingPage> {
                   '/home',
                   arguments: {
                     'themeIndex': widget.themeIndex + 1,
-                  }, // Increment themeIndex
+                  },
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    Mycolors.buttonColor, // Use the custom button color
-                foregroundColor: Colors.white, // Text color
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 30,
-                  vertical: 30,
-                ), // Adjust padding for a larger button
+                backgroundColor:Mycolors.buttonColor, 
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // Rounded corners
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 textStyle: const TextStyle(
-                  fontSize: 25, // Use the font size from the button font
-                  fontWeight: FontWeight.bold, // Use bold text
-                  fontFamily: 'DM Sans', // Use the custom font family
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold, 
+                  fontFamily: 'DM Sans',
                 ),
               ),
               child: const Text('Tilbage til forsiden'),
